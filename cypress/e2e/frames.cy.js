@@ -1,12 +1,10 @@
-describe('Frames / iFrame editing', () => {
-  it('types into TinyMCE iframe', () => {
+describe('Frames / iFrame', () => {
+  it('can type into TinyMCE iframe content', () => {
     cy.visit('/iframe');
-    cy.get('iframe#mce_0_ifr').should('exist');
-    cy.get('iframe#mce_0_ifr').its('0.contentDocument.body').should('not.be.empty')
-      .then(cy.wrap)
-      .clear()
-      .type('Hello from Cypress!');
-    cy.get('iframe#mce_0_ifr').its('0.contentDocument.body').find('p')
-      .should('contain.text', 'Hello from Cypress!');
+    // TinyMCE iframe sometimes has dynamic id; select the only iframe
+    cy.getIframeBody('iframe').within(() => {
+      cy.get('p').click().type('{selectall}{backspace}Hello from Cypress!');
+      cy.get('p').should('contain.text', 'Hello from Cypress!');
+    });
   });
 });
