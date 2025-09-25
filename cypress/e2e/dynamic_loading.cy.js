@@ -1,4 +1,4 @@
-describe('Dynamic Loading', () => {
+describe('Dynamic Loading Example 2', () => {
   it('waits for Hello World', () => {
     cy.visit('/dynamic_loading/2');
     cy.contains('button', 'Start').click();

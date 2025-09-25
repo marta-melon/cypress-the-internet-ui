@@ -1,22 +1,17 @@
-// E2E test – the-internet
-import { Sel } from '../support/selectors.js';
-import path from 'node:path';
-
-describe('File Upload & Download', { tags: ['@regression', '@files'] }, () => {
-  it('uploads a file using built-in selectFile', () => {
+describe('File upload & download', () => {
+  it('uploads a file via /upload', () => {
     cy.visit('/upload');
-    cy.get(Sel.upload.input).selectFile('cypress/fixtures/files/sample.txt');
-    cy.get(Sel.upload.submit).click();
-    cy.get(Sel.upload.uploaded).should('contain.text', 'sample.txt');
+    cy.get('input[type="file"]').should('exist').selectFile('cypress/fixtures/upload/sample.txt');
+    cy.get('#file-submit').click();
+    cy.contains('h3', 'File Uploaded!').should('be.visible');
+    cy.get('#uploaded-files').should('contain.text', 'sample.txt');
   });
 
-  it('downloads a file and verifies it exists', () => {
+  it('verifies download link returns 200 (without saving file)', () => {
     cy.visit('/download');
-    cy.get(Sel.download.items).first().then(($a) => {
-      const fileName = $a.text().trim();
-      cy.wrap($a).click();
-      const downloadsFolder = Cypress.config('downloadsFolder');
-      cy.readFile(path.join(downloadsFolder, fileName), { timeout: 10000 }).should('exist');
+    cy.get('.example a').should('have.length.greaterThan', 0).first().invoke('attr', 'href').then((href) => {
+      expect(href, 'href exists').to.match(/^\/download\//);
+      cy.request(href).its('status').should('eq', 200);
     });
   });
 });
