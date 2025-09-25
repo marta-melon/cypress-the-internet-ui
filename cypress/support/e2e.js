@@ -1,6 +1,1 @@
-// / <reference types="cypress" />
-
-import './commands.js'
-import 'cypress-grep'
-
-export {}
+// custom commands can go here

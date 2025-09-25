@@ -1,20 +1,15 @@
-import { defineConfig } from 'cypress'
-
-export default defineConfig({
+const { defineConfig } = require('cypress');
+module.exports = defineConfig({
   e2e: {
     baseUrl: 'https://the-internet.herokuapp.com',
+    specPattern: 'cypress/e2e/**/*.cy.js',
     supportFile: 'cypress/support/e2e.js',
     setupNodeEvents(on, config) {
-      // place for reporters / tasks if needed
-      return config
+      return config;
     },
-    retries: { runMode: 2, openMode: 0 },
-    defaultCommandTimeout: 8000,
-    pageLoadTimeout: 60000,
   },
-  reporter: 'junit',
-  reporterOptions: {
-    mochaFile: 'results/junit-[hash].xml',
-    toConsole: true,
-  },
-})
+  video: false,
+  defaultCommandTimeout: 8000,
+  viewportWidth: 1280,
+  viewportHeight: 800
+});

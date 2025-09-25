@@ -1,34 +1,17 @@
-# Cypress The-Internet UI Tests
+# cypress-the-internet-ui (fixed)
 
-This project tests **the-internet.herokuapp.com** with Cypress 13 and JavaScript.
+Stabilne testy Cypress dla **the-internet.herokuapp.com**.
 
-## Tests
-- `disappearing_elements.cy.js` – nav items visibility
-- `drag_and_drop.cy.js` – drag’n’drop behavior
-- `dynamic_loading.cy.js` – loading spinners and content
-- `file_upload_download.cy.js` – upload & download flow
-- `frames.cy.js` – iframes and nested frames
-- `infinite_scroll.cy.js` – virtual scroll
-- `jquery_menu.cy.js` – hierarchical menu
-- `quality-a11y.cy.js` – basic WCAG checks
-
-## Install
+## Uruchamianie lokalnie
 ```bash
-npm ci
-npx cypress verify
-```
-...
-Headless:
-```bash
+npm install
 npm test
 ```
 
-## CI
-GitHub Actions runs tests on Ubuntu. It uses matrix (Electron + Chrome) and shards.
+## Struktura
+- `cypress/e2e/*.cy.js` – przykładowe scenariusze (login, checkboxes, add/remove, dynamic loading)
+- `cypress/fixtures/users.json` – dane logowania
+- `cypress.config.js` – CommonJS, `baseUrl` ustawiony na the-internet
 
-Flow:
-```
-push -> matrix -> shard -> run -> artifacts
-```
-
-JUnit XML is saved to `results/`.
+## CI (GitHub Actions)
+Workflow używa `npm install` zamiast `npm ci`, więc nie wymaga lockfile.
