@@ -1,0 +1,11 @@
+node_modules
+.DS_Store
+results
+cypress/screenshots
+cypress/videos
+*.log
+cypress/downloads
+node_modules/
+.DS_Store
+cypress/videos/
+cypress/screenshots/
