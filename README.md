@@ -1,17 +1,33 @@
-# cypress-the-internet-ui (fixed)
+# Cypress UI – The Internet
 
-Stabilne testy Cypress dla **the-internet.herokuapp.com**.
+Automated UI checks for the classic **The Internet** test site. Focus on stable interaction patterns (dynamic elements, frames, uploads) and accessibility.
 
-## Uruchamianie lokalnie
-```bash
-npm install
-npm test
+## Highlights
+- Coverage of tricky UI behaviors: dynamic loading, disappearing elements, drag&drop, infinite scroll, frames.
+- **Login** and common widgets (checkboxes, jQuery menu).
+- **Accessibility smoke** on key pages.
+- Clean selectors and robust waiting strategy (no fixed sleeps).
+
+## Structure
+```
+cypress/
+  e2e/                  # specs per feature (login, frames, uploads, dnd, a11y, etc.)
+  support/              # commands & hooks
+  fixtures/             # sample files for upload/download
+cypress.config.js
+package.json
 ```
 
-## Struktura
-- `cypress/e2e/*.cy.js` – przykładowe scenariusze (login, checkboxes, add/remove, dynamic loading)
-- `cypress/fixtures/users.json` – dane logowania
-- `cypress.config.js` – CommonJS, `baseUrl` ustawiony na the-internet
+## Usage
+```bash
+npm ci
+npm test
+npm run open
+```
 
-## CI (GitHub Actions)
-Workflow używa `npm install` zamiast `npm ci`, więc nie wymaga lockfile.
+### Test selection
+Tag important specs (e.g. `@smoke`) and run a subset using cypress-grep if configured: `--env grepTags=@smoke`.
+
+## What this suite validates
+- Common web UI pitfalls continue to work across builds.
+- Accessibility issues on core pages are caught early.

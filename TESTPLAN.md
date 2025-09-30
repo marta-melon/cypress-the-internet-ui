@@ -1,17 +1,30 @@
-# Test Plan – The Internet
+# Test Plan – The Internet (Cypress UI)
+
+## Objective
+Ensure core interactions on the The Internet site behave consistently and remain accessible.
 
 ## Scope
-- Disappearing Elements – nav visibility (positive/negative).
-- Drag and Drop – DnD operations and ordering.
-- Dynamic Loading – two examples, loader handling.
-- File Upload/Download – end-to-end file flow.
-- Frames – simple/nested frame interactions.
-- Infinite Scroll – lazy content behavior.
-- jQuery Menu – multi-level menu.
-- A11y – WCAG critical/serious.
-- Visual – snapshot smoke (optional).
+- Add/Remove Elements, Checkboxes, Disappearing Elements.
+- Drag & Drop, Dynamic Loading, Infinite Scroll.
+- Frames (iFrame) interactions.
+- File upload/download.
+- Login flow (positive/negative).
+- Accessibility smoke on representative pages.
 
-## Stability
-- Fresh session per spec.
-- Retries: 2x runMode.
-- No fixed sleeps.
+**Out of scope**: exhaustive cross‑browser/perf testing; visual diffs.
+
+## Test design
+- Deterministic selectors; retries enabled.
+- Upload/download uses fixture files; cleans up artifacts after run.
+- Each spec isolates its own setup/teardown.
+
+## Acceptance gates
+- All smoke specs pass on main.
+- No serious/critical a11y violations.
+
+## Reporting
+- Standard Cypress artifacts; optional JUnit export for CI.
+
+## Risks & mitigations
+- Flaky drag&drop → use helper commands and stable target coordinates.
+- Dynamic content → assert eventual state with sensible timeouts, avoid `cy.wait` with magic numbers.
