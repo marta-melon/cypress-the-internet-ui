@@ -1,15 +1,44 @@
-name: Matrix
-on: [workflow_dispatch]
+name: cypress-matrix
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
 jobs:
-  run:
+  e2e:
     runs-on: ubuntu-latest
     strategy:
-      matrix: { browser: [chrome, electron] }
+      fail-fast: false
+      matrix:
+        browser: [electron, chrome]
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-      - run: npm ci
-      - run: npx cypress run --browser ${{ matrix.browser }} --headless --reporter junit --reporter-options mochaFile=results/junit-[hash].xml
-      - uses: actions/upload-artifact@v4
-        with: { name: results-${{ matrix.browser }}, path: results }
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify Cypress
+        run: npx cypress verify
+
+      - name: Run Cypress
+        run: |
+          npx cypress run --browser ${{ matrix.browser }} --headless             --reporter junit --reporter-options "mochaFile=results/junit-[hash].xml,toConsole=true"
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-${{ matrix.browser }}
+          path: |
+            results
+            cypress/screenshots
+            cypress/videos
+          if-no-files-found: ignore
