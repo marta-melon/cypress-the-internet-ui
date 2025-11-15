@@ -1,20 +1,21 @@
 describe('iFrame', () => {
   it('Can type into editor using helper', () => {
+    const text = 'Hello from Cypress!';
+
     cy.visit('/iframe');
 
-    // Prefer dynamic id that TinyMCE uses (#mce_0_ifr), but fall back to any iframe on the page
-    const iframeSel = 'iframe[id^="mce_"], iframe#mce_0_ifr, iframe';
+    // TinyMCE iframe on the-internet — usually has id "mce_0_ifr"
+    const iframeSelector = 'iframe[id^="mce_"], iframe#mce_0_ifr';
 
-    // getIframeBody returns <body> inside iframe (TinyMCE body with id=tinymce)
-    const $body = cy.getIframeBody(iframeSel);
-    const text = 'Hello from Cypress!';
-    $body.should('have.id', 'tinymce')
-      // the site often configures editor as read-only; make it editable for the purpose of the test
+    // getIframeBody returns the <body> inside the iframe (TinyMCE body with id="tinymce")
+    cy.getIframeBody(iframeSelector)
+      .should('have.id', 'tinymce')
+      // TinyMCE sometimes marks the body as read-only — make it editable for the test
       .invoke('removeClass', 'mce-content-readonly')
       .invoke('attr', 'contenteditable', 'true')
+      .find('p')
       .clear()
-      .type(text);
-
-    $body.should('contain.text', text)
+      .type(text)
+      .should('contain.text', text);
   });
 });
