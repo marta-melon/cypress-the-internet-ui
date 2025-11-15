@@ -1,7 +1,7 @@
 # the-internet — Cypress UI tests
 
 Key points:
-- Clean selectors (see `support/selectors.js`) and robust waiting (no fixed sleeps).
+- Robust waiting (no fixed sleeps).
 - Accessibility smoke via `cypress-axe` on core pages.
 - Console error checks on key flows.
 - Matrix CI (Electron + Chrome), JUnit reports uploaded as artifacts.
@@ -22,7 +22,6 @@ npm test       # headless
 cypress/
   e2e/
   support/
-    selectors.js
     e2e.js
     commands.js
 ```

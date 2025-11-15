@@ -27,7 +27,6 @@ describe('Drag and Drop', () => {
     });
 
     // Now we expect B on left, A on right
-    header(a).should('contain.text', 'B');
-    header(b).should('contain.text', 'A');
+    expectOrder(b, a);
   });
 });

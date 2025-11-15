@@ -9,7 +9,6 @@ import 'cypress-axe';
  */
 function makeDataTransfer() {
   try {
-    // @ts-ignore
     return new DataTransfer();
   } catch (e) {
     // Minimal stub used by many DnD helpers
@@ -42,8 +41,7 @@ function dispatchDragEvent(el, type, dataTransfer) {
 }
 
 /**
- * HTML5 Drag & Drop with a pragmatic fallback.
- * Tries native DnD events first; if DOM content did not change, swaps innerHTML.
+ * HTML5 Drag & Drop
  */
 function html5DndImpl(sourceSelector, targetSelector) {
   const dataTransfer = makeDataTransfer();
@@ -53,32 +51,19 @@ function html5DndImpl(sourceSelector, targetSelector) {
     cy.get(targetSelector).then(($tgt) => {
       const target = $tgt[0];
 
-      const before = `${source.textContent}__${target.textContent}`;
-
       dispatchDragEvent(source, 'dragstart', dataTransfer);
       dispatchDragEvent(target, 'dragenter', dataTransfer);
       dispatchDragEvent(target, 'dragover', dataTransfer);
       dispatchDragEvent(target, 'drop', dataTransfer);
       dispatchDragEvent(source, 'dragend', dataTransfer);
-
-      const after = `${source.textContent}__${target.textContent}`;
-      if (after === before) {
-        // Fallback: swap innerHTML if native DnD did not change DOM
-        const tmp = source.innerHTML;
-        source.innerHTML = target.innerHTML;
-        target.innerHTML = tmp;
-      }
     });
   });
 }
 
-Cypress.Commands.add('html5Dnd', html5DndImpl);
-// Some specs use a different capitalization: provide an alias.
 Cypress.Commands.add('html5DnD', html5DndImpl);
 
 /**
  * Returns the iframe's <body> wrapped by Cypress.
- * Works with the-internet /iframe (TinyMCE) where the body has id="tinymce".
  */
 Cypress.Commands.add('getIframeBody', (iframeSelector) => {
   return cy

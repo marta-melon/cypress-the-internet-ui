@@ -15,7 +15,7 @@ describe('jQuery UI menu', () => {
 
     cy.contains('a', 'PDF').should('be.visible').then(($a) => {
       const href = $a.attr('href');
-      expect(href, 'PDF href present').to.match(/\.pdf$/);
+      expect(href, 'Missing PDF href').to.match(/\.pdf$/);
       cy.request(href).its('status').should('eq', 200);
     });
   });
