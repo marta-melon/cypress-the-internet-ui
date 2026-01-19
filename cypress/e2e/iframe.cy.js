@@ -4,18 +4,21 @@ describe('iFrame', () => {
 
     cy.visit('/iframe');
 
-    // TinyMCE iframe on the-internet — usually has id "mce_0_ifr"
+    // TinyMCE iframe on the-internet — usually has id like "mce_0_ifr"
     const iframeSelector = 'iframe[id^="mce_"], iframe#mce_0_ifr';
 
-    // getIframeBody returns the <body> inside the iframe (TinyMCE body with id="tinymce")
+    // Break the chain to avoid "detached from DOM" when TinyMCE re-renders.
     cy.getIframeBody(iframeSelector)
       .should('have.id', 'tinymce')
-      // TinyMCE sometimes marks the body as read-only — make it editable for the test
       .invoke('removeClass', 'mce-content-readonly')
-      .invoke('attr', 'contenteditable', 'true')
-      .find('p')
-      .clear()
-      .type(text)
-      .should('contain.text', text);
+      .invoke('attr', 'contenteditable', 'true');
+
+    cy.getIframeBody(iframeSelector).then(($body) => {
+      cy.wrap($body)
+        .click()
+        .type(`{selectall}{backspace}${text}`, { delay: 0 });
+    });
+
+    cy.getIframeBody(iframeSelector).should('contain.text', text);
   });
 });
