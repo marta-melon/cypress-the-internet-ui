@@ -5,7 +5,7 @@ describe('Disappearing Elements', () => {
     let seen = false;
     const attempts = 8;
 
-    function check(i) {
+    const check = (i) => {
       cy.visit('/disappearing_elements');
       cy.get(menuElement).then(($links) => {
         const texts = $links.toArray().map((el) => el.textContent.trim());

@@ -25,7 +25,7 @@ describe('Quality — JS errors are not thrown on key pages', () => {
 
       cy.on('window:before:load', (win) => {
         const orig = win.console.error;
-        win.console.error = function(...args) {
+        win.console.error = (...args) => {
           errors.push(args.join(' '));
           return orig.apply(this, args);
         };
